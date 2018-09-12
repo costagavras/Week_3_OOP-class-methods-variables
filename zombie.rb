@@ -54,8 +54,8 @@ class Zombie
   def outrun_zombie?
     # This instance method should use @@max_speed to generate a random number that represents how fast you manage to run from this particular zombie.
     # This method should return true if your speed is greater than the zombie's and false otherwise.
-    speed = rand(@max_speed) #is using variable *speed* correct?
-    if speed > @speed #=self.speed
+    speed = rand(@max_speed)
+    if speed > @speed #=self.speed (will not work because i don't have a return method for instance zombie(n)
       return true
     else
       return false
