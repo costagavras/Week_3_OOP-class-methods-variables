@@ -11,21 +11,21 @@ class BankAccount
   def self.create
     my_account = BankAccount.new
     @@accounts << my_account
-      # puts @@accounts
+    # puts @@accounts
     return my_account
   end
 
-  #Attribute Readers (getter)
+  # Attribute Readers (getter)
   def balance
-      @balance
+    @balance
   end
 
-  #Attribute Writers (setter)
+  # Attribute Writers (setter)
   def balance=(balance)
-      @balance = balance
+    @balance = balance
   end
 
-  #Instance methods
+  # Instance methods
   def deposit(balance)
     @balance += balance
   end
@@ -37,16 +37,15 @@ class BankAccount
   def self.total_funds
     total_funds = 0
     @@accounts.each do |account|
-              total_funds += account.balance
-            end
-      return total_funds
+      total_funds += account.balance
+    end
+    return total_funds
   end
 
   def self.interest_time
-
-     @@accounts.each do |account|
-              account.balance = account.balance * (1 + @@interest_rate)
-            end
+    @@accounts.each do |account|
+      account.balance = account.balance * (1 + @@interest_rate)
+    end
   end
 
 end
