@@ -9,8 +9,8 @@ class Zombie
   @@default_strength =  3
 
   def initialize(speed, strength)
-    #If the speed argument is greater than @@max_speed then
-    #@@default_speed should be used as the new zombie's speed instead.
+    # If the speed argument is greater than @@max_speed then
+    # @@default_speed should be used as the new zombie's speed instead.
     if speed > @@max_speed
       @speed = @@default_speed
     else
@@ -27,6 +27,13 @@ class Zombie
   end
 
   # Attribute Readers (getter) --------------------------------------
+  def speed
+    @speed
+  end
+
+  def strength
+    @strength
+  end
 
   # Attribute Writers (setter) --------------------------------------
 
@@ -38,16 +45,14 @@ class Zombie
     # (ie. you don't outrun the zombie but you aren't killed by it), create a new zombie object (that's you!)
     # and add it to the @@horde. Return outcome.
 
-    if outrun_zombie?()
-        puts "Too fast to be a zombie"
+    if outrun_zombie?
+      puts "Too fast to be a zombie"
+    elsif survive_attack?
+      puts "I'm a zombie"
+      @@horde << Zombie.new(0, 0) # I'm a miserable nogoodnik zombie
+      puts Zombie.all.inspect
     else
-      if survive_attack?()
-          puts "I'm a zombie"
-          @@horde << Zombie.new(0, 0) #I'm a miserable nogoodnik zombie
-          puts Zombie.all.inspect
-      else
-          puts "I'm killed"
-      end
+      puts "I'm killed"
     end
   end
 
@@ -73,7 +78,6 @@ class Zombie
     end
   end
 
-
   # Class methods ---------------------------------------------------
 
   def self.all
@@ -83,14 +87,14 @@ class Zombie
 
   def self.new_day
     # new_day should call some_die_off, spawn, and increase_plague_level.
-    self.increase_plague_level()
-    self.spawn()
-    self.some_die_off()
+    self.increase_plague_level
+    self.spawn
+    self.some_die_off
   end
 
   def self.some_die_off
     rand(10).times do
-        @@horde.pop while @@horde.count > 3 #condition to avoid the count of zombie in horde going below 3
+      @@horde.pop while @@horde.count > 3 # condition to avoid the count of zombie in horde going below 3
     end
     puts "Now zombies in a horde are:"
     puts @@horde.count
@@ -108,12 +112,26 @@ class Zombie
     # This class method should generate a random number between 0 and 2
     # and increase @@plague_level by that amount.
     # puts @@plague_level
-    @@plague_level += rand(2)
+    puts @@horde.size
+    puts "-----------------"
+    @@plague_level += rand(@@horde.size).round(0) # Stretch 1. plague level increases is somehow based on the number of zombies in the horde
     puts "New plague level (10+zombies added) is:"
     puts @@plague_level
     return @@plague_level
   end
 
+  def self.deadliest_zombie
+    max_powers = 0
+    super_zombie = ""
+    Zombie.all.each do |zombie|
+      if max_powers < (zombie.speed * zombie.strength)
+        max_powers = zombie.speed * zombie.strength
+        super_zombie = zombie.inspect
+      end
+    end
+    puts
+    puts "The deadliest_zombie is #{super_zombie}"
+  end
 
 end
 
@@ -131,6 +149,7 @@ puts zombie1.encounter # You are now a zombie
 puts zombie2.encounter # You died
 puts zombie3.encounter # You died
 puts Zombie.all.inspect
+Zombie.increase_plague_level
 Zombie.new_day
 puts Zombie.all.inspect # [#<Zombie:0x005626ecc5e1f8 @speed=0, @strength=0>, #<Zombie:0x005626ecc5e180 @speed=3, @strength=3>, #<Zombie:0x005626ecc5e158 @speed=1, @strength=2>, #<Zombie:0x005626ecc5e090 @speed=0, @strength=4>]
 zombie1 = Zombie.all[0]
@@ -139,3 +158,8 @@ zombie3 = Zombie.all[2]
 puts zombie1.encounter # You got away
 puts zombie2.encounter # You are now a zombie
 puts zombie3.encounter # You died
+
+# Stretch 2: Add a method called deadliest_zombie that returns the zombie that has the highest combination of speed and strength.
+# Should this be a class method or an instance method?
+
+Zombie.deadliest_zombie
